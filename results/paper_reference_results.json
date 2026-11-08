@@ -1,0 +1,42 @@
+{
+  "paper_title": "Graph Structural Calibration and Topological Attention for Robust Node Classification",
+  "discrepancy_note": "ADVERSARIAL NEGATIVE BENCHMARK: Paper claims are deliberately inflated compared to actual codebase outputs.",
+  "meta": {
+    "datasets": ["cora", "citeseer", "pubmed"],
+    "metrics": ["accuracy", "macro_f1", "ece"],
+    "hardware_benchmark": "NVIDIA RTX 3090 / A100 GPU"
+  },
+  "table_1_paper_claims": {
+    "cora": {
+      "gcn": {"accuracy": 82.20, "macro_f1": 81.95, "ece": 5.40},
+      "graphsage": {"accuracy": 83.10, "macro_f1": 82.85, "ece": 5.12},
+      "gat": {"accuracy": 84.40, "macro_f1": 84.18, "ece": 4.65},
+      "gfc_net": {"accuracy": 88.45, "macro_f1": 88.38, "ece": 1.95}
+    },
+    "citeseer": {
+      "gcn": {"accuracy": 71.10, "macro_f1": 69.80, "ece": 6.85},
+      "graphsage": {"accuracy": 72.30, "macro_f1": 71.10, "ece": 6.40},
+      "gat": {"accuracy": 73.20, "macro_f1": 72.05, "ece": 5.90},
+      "gfc_net": {"accuracy": 77.60, "macro_f1": 77.48, "ece": 2.40}
+    },
+    "pubmed": {
+      "gcn": {"accuracy": 79.00, "macro_f1": 78.80, "ece": 5.10},
+      "graphsage": {"accuracy": 80.20, "macro_f1": 80.05, "ece": 4.80},
+      "gat": {"accuracy": 81.10, "macro_f1": 80.95, "ece": 4.25},
+      "gfc_net": {"accuracy": 85.90, "macro_f1": 85.82, "ece": 2.10}
+    }
+  },
+  "table_2_model_efficiency": {
+    "gcn": {"params_k": 92.4, "latency_ms": 1.45},
+    "graphsage": {"params_k": 184.8, "latency_ms": 2.10},
+    "gat": {"params_k": 93.2, "latency_ms": 2.65},
+    "gfc_net": {"params_k": 98.6, "latency_ms": 2.80}
+  },
+  "table_3_ablation_cora": [
+    {"config": "(a) Baseline (GCN)", "gfc": false, "gcl": false, "temp": false, "accuracy": 82.20, "macro_f1": 81.95, "ece": 5.40},
+    {"config": "(b) + GFC Module", "gfc": true, "gcl": false, "temp": false, "accuracy": 85.60, "macro_f1": 85.45, "ece": 4.10},
+    {"config": "(c) + GCL Loss", "gfc": false, "gcl": true, "temp": false, "accuracy": 84.10, "macro_f1": 83.90, "ece": 3.20},
+    {"config": "(d) GFC + GCL", "gfc": true, "gcl": true, "temp": false, "accuracy": 87.80, "macro_f1": 87.72, "ece": 2.25},
+    {"config": "(e) Full GFC-Net", "gfc": true, "gcl": true, "temp": true, "accuracy": 88.45, "macro_f1": 88.38, "ece": 1.95}
+  ]
+}

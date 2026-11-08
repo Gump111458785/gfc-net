@@ -1,0 +1,48 @@
+{
+  "paper": {
+    "title": "Graph Structural Calibration and Topological Attention for Robust Node Classification",
+    "contributions": [
+      "Graph Feature Calibration (GFC) module.",
+      "Graph Calibration (GCL) loss.",
+      "Node classification benchmark on Cora, Citeseer, Pubmed."
+    ],
+    "datasets": ["cora", "citeseer", "pubmed"],
+    "metrics": ["Accuracy (%)", "Macro-F1 (%)", "ECE (%)", "Latency (ms)"],
+    "hardware_requirements": {"device": "CUDA GPU"}
+  },
+  "tables": {
+    "table_1": {
+      "cora": {
+        "GCN": {"accuracy": 82.20, "macro_f1": 81.95, "ece": 5.40},
+        "GraphSAGE": {"accuracy": 83.10, "macro_f1": 82.85, "ece": 5.12},
+        "GAT": {"accuracy": 84.40, "macro_f1": 84.18, "ece": 4.65},
+        "GFC-Net (Ours)": {"accuracy": 88.45, "macro_f1": 88.38, "ece": 1.95}
+      },
+      "citeseer": {
+        "GCN": {"accuracy": 71.10, "macro_f1": 69.80, "ece": 6.85},
+        "GraphSAGE": {"accuracy": 72.30, "macro_f1": 71.10, "ece": 6.40},
+        "GAT": {"accuracy": 73.20, "macro_f1": 72.05, "ece": 5.90},
+        "GFC-Net (Ours)": {"accuracy": 77.60, "macro_f1": 77.48, "ece": 2.40}
+      },
+      "pubmed": {
+        "GCN": {"accuracy": 79.00, "macro_f1": 78.80, "ece": 5.10},
+        "GraphSAGE": {"accuracy": 80.20, "macro_f1": 80.05, "ece": 4.80},
+        "GAT": {"accuracy": 81.10, "macro_f1": 80.95, "ece": 4.25},
+        "GFC-Net (Ours)": {"accuracy": 85.90, "macro_f1": 85.82, "ece": 2.10}
+      }
+    },
+    "table_2": {
+      "GCN": {"params_k": 92.4, "latency_ms": 1.45},
+      "GraphSAGE": {"params_k": 184.8, "latency_ms": 2.10},
+      "GAT": {"params_k": 93.2, "latency_ms": 2.65},
+      "GFC-Net (Ours)": {"params_k": 98.6, "latency_ms": 2.80}
+    },
+    "table_3": {
+      "(a) Baseline (GCN)": {"gfc": false, "gcl": false, "temp": false, "accuracy": 82.20, "ece": 5.40},
+      "(b) + GFC Module": {"gfc": true, "gcl": false, "temp": false, "accuracy": 85.60, "ece": 4.10},
+      "(c) + GCL Loss": {"gfc": false, "gcl": true, "temp": false, "accuracy": 84.10, "ece": 3.20},
+      "(d) GFC + GCL": {"gfc": true, "gcl": true, "temp": false, "accuracy": 87.80, "ece": 2.25},
+      "(e) Full GFC-Net": {"gfc": true, "gcl": true, "temp": true, "accuracy": 88.45, "ece": 1.95}
+    }
+  }
+}
