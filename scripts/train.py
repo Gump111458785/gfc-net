@@ -40,8 +40,8 @@ def main():
     parser.add_argument("--hidden_dim", type=int, default=64)
     parser.add_argument("--use_gfc", action="store_true", default=True)
     parser.add_argument("--no_gfc", dest="use_gfc", action="store_false")
-    parser.add_argument("--use_gcl", action="store_true", default=True)
-    parser.add_argument("--no_gcl", dest="use_gcl", action="store_false")
+    parser.add_argument("--use_gcl", dest="use_gcl", action="store_true", default=None, help="Explicitly enable GCL loss")
+    parser.add_argument("--no_gcl", dest="use_gcl", action="store_false", help="Explicitly disable GCL loss")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--cpu_debug", action="store_true")
 
@@ -79,7 +79,19 @@ def main():
         use_gfc=args.use_gfc,
     ).to(device)
 
-    criterion = GraphCalibrationLoss(smoothing=0.05, cal_weight=0.15, use_gcl=args.use_gcl).to(device)
+    # Loss Function Assignment
+    # Baselines (gcn, graphsage, gat) and non-GCL ablation variants strictly use standard nn.CrossEntropyLoss
+    if args.use_gcl is None:
+        use_gcl = (args.model == "gfc_net")
+    else:
+        use_gcl = args.use_gcl
+
+    if use_gcl:
+        print("[Loss Objective] Employing Graph Calibration Loss (GCL).")
+        criterion = GraphCalibrationLoss(smoothing=0.05, cal_weight=0.15, use_gcl=True).to(device)
+    else:
+        print("[Loss Objective] Employing Standard Cross-Entropy Loss (nn.CrossEntropyLoss) for baseline / ablation.")
+        criterion = nn.CrossEntropyLoss().to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     run_name = f"{args.model}_{args.dataset}_seed{args.seed}"

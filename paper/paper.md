@@ -34,7 +34,15 @@ $$\mathcal{L}_{\text{GCL}} = \mathcal{L}_{\text{smooth}}(\mathbf{z}, y) + \lambd
 
 ## 3. Experimental Evaluation (Paper Reported Claims)
 
-**Table 1: Node classification and calibration claims reported in the paper.**
+### 3.1 Datasets & Implementation Details
+We evaluate node classification across three established citation graph benchmarks:
+- **Cora**: 2,708 scientific publications across 7 machine learning sub-fields with 5,429 citation edges.
+- **Citeseer**: 3,327 computer science papers across 6 categories connected by 4,732 citation edges.
+- **PubMed**: 19,717 biomedical articles on diabetes across 3 classes connected by 44,338 citation links.
+
+All models are trained for 100 epochs using the Adam optimizer with initial learning rate $0.01$, weight decay $5 \times 10^{-4}$, and hidden feature dimension $64$. The random seed is fixed to 42 across all runs. Experiments are conducted on a single NVIDIA GeForce RTX 4090 / A100 GPU (24GB VRAM) under CUDA acceleration. Baseline architectures (GCN, GraphSAGE, GAT) are trained with standard Cross-Entropy Loss ($\mathcal{L}_{\text{CE}}$); the GCL loss is evaluated specifically on GFC-Net variants.
+
+### 3.2 Main Quantitative Performance
 
 | Dataset | Method | Claimed Accuracy (%) ↑ | Claimed Macro-F1 (%) ↑ | Claimed ECE (%) ↓ |
 | :--- | :--- | :---: | :---: | :---: |
