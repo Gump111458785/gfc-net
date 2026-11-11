@@ -32,13 +32,9 @@ def get_graph_data(dataset_name: str, data_dir: str = "./data/cache", download: 
         raise ValueError(f"Dataset {name} not supported.")
 
     target_dir = os.path.join(data_dir, name)
-    if not verify_dataset(name, data_dir):
-        if download:
-            download_dataset(name, data_dir)
-        else:
-            raise FileNotFoundError(f"Missing dataset {name}.")
-
     cache_file = os.path.join(target_dir, "graph_data.pkl")
+    if not os.path.exists(cache_file):
+        download_dataset(name, data_dir)
     with open(cache_file, "rb") as f:
         data = pickle.load(f)
 
