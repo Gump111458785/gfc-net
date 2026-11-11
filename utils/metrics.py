@@ -7,7 +7,33 @@ from typing import Dict, Any
 import numpy as np
 import torch
 import torch.nn.functional as F
-from sklearn.metrics import f1_score, accuracy_score
+
+try:
+    from sklearn.metrics import f1_score, accuracy_score
+except ImportError:
+    f1_score = None
+    accuracy_score = None
+
+
+def compute_macro_f1(targets: np.ndarray, preds: np.ndarray) -> float:
+    """Computes macro-averaged F1 score with pure NumPy fallback (zero sklearn required)."""
+    if f1_score is not None:
+        try:
+            return float(f1_score(targets, preds, average="macro") * 100.0)
+        except Exception:
+            pass
+    classes = np.unique(targets)
+    if len(classes) == 0:
+        return 0.0
+    f1_list = []
+    for c in classes:
+        tp = np.sum((preds == c) & (targets == c))
+        fp = np.sum((preds == c) & (targets != c))
+        fn = np.sum((preds != c) & (targets == c))
+        denom = 2 * tp + fp + fn
+        f1 = (2.0 * tp / denom) if denom > 0 else 0.0
+        f1_list.append(f1)
+    return float(np.mean(f1_list) * 100.0) if len(f1_list) > 0 else 0.0
 
 
 def compute_ece(probs: np.ndarray, labels: np.ndarray, n_bins: int = 15) -> float:
@@ -46,9 +72,9 @@ def evaluate_node_classification(
         sub_preds = torch.argmax(logits[mask_indices], dim=1).cpu().numpy()
         sub_targets = labels[mask_indices].cpu().numpy()
 
-    acc = accuracy_score(sub_targets, sub_preds) * 100.0
-    macro_f1 = f1_score(sub_targets, sub_preds, average="macro") * 100.0
-    micro_f1 = f1_score(sub_targets, sub_preds, average="micro") * 100.0
+    acc = float(np.mean(sub_preds == sub_targets) * 100.0)
+    macro_f1 = compute_macro_f1(sub_targets, sub_preds)
+    micro_f1 = acc
     ece = compute_ece(sub_probs, sub_targets, n_bins=15)
 
     return {
