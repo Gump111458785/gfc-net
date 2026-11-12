@@ -34,7 +34,7 @@ def main():
     parser.add_argument("--dataset", type=str, default="cora", choices=SUPPORTED_DATASETS)
     parser.add_argument("--data_dir", type=str, default="./data/cache")
     parser.add_argument("--output_dir", type=str, default="./checkpoints")
-    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--epochs", type=int, default=50, help="Training epochs (default: 50 for rapid evaluation; use 100 for full reproduction)")
     parser.add_argument("--lr", type=float, default=0.01)
     parser.add_argument("--weight_decay", type=float, default=5e-4)
     parser.add_argument("--hidden_dim", type=int, default=64)
